@@ -1,6 +1,6 @@
 # Hệ thống CRM Nội Bộ Tích hợp AI
-**Đồ án Tốt nghiệp:** Nghiên cứu và Ứng dụng AI trong Hệ thống CRM Nội Bộ, Đánh giá Khách hàng và Tóm tắt Cuộc hẹn
-**Sinh viên thực hiện:** Đỗ Minh Anh - 2121051159
+Nghiên cứu và Ứng dụng AI trong Hệ thống CRM Nội Bộ, Đánh giá Khách hàng và Tóm tắt Cuộc hẹn
+
 
 ## 📖 Giới thiệu dự án
 Dự án xây dựng một hệ thống Quản lý Quan hệ Khách hàng (CRM) nhằm hỗ trợ doanh nghiệp quản lý thông tin khách hàng, theo dõi quá trình chăm sóc khách hàng và tự động hóa các nghiệp vụ kinh doanh.
