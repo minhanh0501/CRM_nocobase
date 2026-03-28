@@ -1,0 +1,290 @@
+{
+  "updatedAt": "2026-03-02T11:22:34.144Z",
+  "createdAt": "2026-03-02T10:59:11.283Z",
+  "id": "6BM3I70zslOP34cY",
+  "name": "Lấy data của công nợ",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://nocobase.manhmanh.io.vn/api/cong_no:get",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filterByTk",
+              "value": "={{ $json.body.content }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -32,
+        112
+      ],
+      "id": "553c96e3-dccd-4201-bffb-3dd809193f11",
+      "name": "Công nợ",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://nocobase.manhmanh.io.vn/api/hop_dong:get",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filterByTk",
+              "value": "={{ $json.data.id_hopdong }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        160,
+        -16
+      ],
+      "id": "a0f656c2-944b-48d7-877e-0a5ac64f9e1e",
+      "name": "Hợp đồng",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://nocobase.manhmanh.io.vn/api/t_whq51q47o83:get",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filterByTk",
+              "value": "={{ $json.data.id_khachhang }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        352,
+        -144
+      ],
+      "id": "a60f8bf0-f80a-4ecb-9396-590e47e224cf",
+      "name": "Khách hàng",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "7114b1cf-76a2-431a-a374-dd7614605658",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -240,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        -32
+      ],
+      "id": "9a935387-037c-420c-ac61-8a8923c11459",
+      "name": "Merge",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        736,
+        96
+      ],
+      "id": "9c01b57a-601e-4c0e-8fb6-c8ba689c8bd4",
+      "name": "Merge1",
+      "executeOnce": false
+    }
+  ],
+  "connections": {
+    "Công nợ": {
+      "main": [
+        [
+          {
+            "node": "Hợp đồng",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Hợp đồng": {
+      "main": [
+        [
+          {
+            "node": "Khách hàng",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Công nợ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Khách hàng": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "4fe51c06-0ac2-4b0f-ba56-e79450df1ff9",
+  "activeVersionId": "4fe51c06-0ac2-4b0f-ba56-e79450df1ff9",
+  "versionCounter": 106,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-02T10:59:11.283Z",
+      "createdAt": "2026-03-02T10:59:11.283Z",
+      "role": "workflow:owner",
+      "workflowId": "6BM3I70zslOP34cY",
+      "projectId": "KwdJmDNvRqASiU2x",
+      "project": {
+        "updatedAt": "2026-02-27T13:59:50.045Z",
+        "createdAt": "2026-02-27T13:57:38.921Z",
+        "id": "KwdJmDNvRqASiU2x",
+        "name": "Minh Anh <minhanh01689@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "86288051-a86a-44f6-959c-04bf1c3dbb9f"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version 4fe51c06",
+    "description": ""
+  }
+}

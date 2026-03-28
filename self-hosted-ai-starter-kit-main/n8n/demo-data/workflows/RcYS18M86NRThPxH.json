@@ -1,0 +1,144 @@
+{
+  "updatedAt": "2026-03-22T02:52:30.391Z",
+  "createdAt": "2026-03-02T11:47:35.666Z",
+  "id": "RcYS18M86NRThPxH",
+  "name": "Tạo meet và gửi mail",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tao-meet",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "674b8d2f-59f5-43f8-ba02-4737826c05b5",
+      "name": "Webhook",
+      "webhookId": "1149d33d-02d7-451f-ba00-8aa428076537"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "minhanh01689@gmail.com",
+          "mode": "list",
+          "cachedResultName": "minhanh01689@gmail.com"
+        },
+        "start": "={{ $json.query.ngay_hen.toDateTime() }}",
+        "end": "={{  $json.query.ngay_hen.toDateTime().plus(1, 'hour') }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $json.query.email_khach }}"
+          ],
+          "conferenceDataUi": {
+            "conferenceDataValues": {
+              "conferenceSolution": "hangoutsMeet"
+            }
+          },
+          "description": "={{ $json.query.noi_dung }}",
+          "sendUpdates": "all",
+          "summary": "={{ $json.query.tieu_de }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "80da1722-d651-4f93-bf4a-968903365c37",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "q48wUPiLYEIluuER",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.htmlLink }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        0
+      ],
+      "id": "95af5120-a2d1-403f-abbb-ff0207a87875",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "f6c7db22-714a-42b0-bb8c-3c486911f676",
+  "activeVersionId": "f6c7db22-714a-42b0-bb8c-3c486911f676",
+  "versionCounter": 33,
+  "triggerCount": 1,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-02T11:47:35.666Z",
+      "createdAt": "2026-03-02T11:47:35.666Z",
+      "role": "workflow:owner",
+      "workflowId": "RcYS18M86NRThPxH",
+      "projectId": "KwdJmDNvRqASiU2x",
+      "project": {
+        "updatedAt": "2026-02-27T13:59:50.045Z",
+        "createdAt": "2026-02-27T13:57:38.921Z",
+        "id": "KwdJmDNvRqASiU2x",
+        "name": "Minh Anh <minhanh01689@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "86288051-a86a-44f6-959c-04bf1c3dbb9f"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version f6c7db22",
+    "description": ""
+  }
+}

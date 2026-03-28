@@ -1,0 +1,285 @@
+{
+  "updatedAt": "2026-03-18T15:31:03.134Z",
+  "createdAt": "2026-03-01T08:23:30.537Z",
+  "id": "FfEn46OkdGGBJSyu",
+  "name": "In hợp đồng",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8555b46e-d3a1-4f19-8695-c014dd06a804",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5b89d278-9036-4e27-bfcf-7cd9aced8280",
+      "name": "Webhook",
+      "webhookId": "8555b46e-d3a1-4f19-8695-c014dd06a804"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1DYBgsUmtBUrL4_1LqPkZHDyOsU_tdC2QSu5z4fGNfPE",
+          "mode": "id"
+        },
+        "name": "={{ $json.query.ten_hop_dong }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "69693d9a-5eff-4a97-86a6-b08cf2cbf328",
+      "name": "Copy file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6a7pKgfokMFUATu3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('Copy file').item.json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{{ten_hop_dong}}",
+              "replaceText": "={{ $('Webhook').item.json.query.ten_hop_dong }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{ten_cong_ty}}",
+              "replaceText": "={{ $('Webhook').item.json.query.ten_cong_ty }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{nguoi_dai_dien}}",
+              "replaceText": "={{ $('Webhook').item.json.query.nguoi_dai_dien }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{chuc_vu}}",
+              "replaceText": "={{ $('Webhook').item.json.query.chuc_vu }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{tong_gia_tri_hop_dong}}",
+              "replaceText": "={{ $json.tong_gia_tri_hop_dong }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{bang_chu}}",
+              "replaceText": "={{ $json.tong_gia_tri_hop_dong_text }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{ngay_ky}}",
+              "replaceText": "={{ $json.ngay_ky_hop_dong_format }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{ngay_het_han}}",
+              "replaceText": "={{ $json.ngay_het_han_format }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "441d4bca-19ba-44e7-bda4-8a26cd4af1bc",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "RXLaUDKfGcBI0yzg",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function formatDate(dateStr) {\n  if (!dateStr) return \"\";\n  const [year, month, day] = dateStr.split(\"-\");\n  return `${day}/${month}/${year}`;\n}\n\nfunction formatCurrency(number) {\n  if (!number) return \"\";\n  return parseInt(number).toLocaleString(\"vi-VN\");\n}\n\nfunction numberToVietnameseText(number) {\n  const units = [\"\", \"một\", \"hai\", \"ba\", \"bốn\", \"năm\", \"sáu\", \"bảy\", \"tám\", \"chín\"];\n  const scales = [\"\", \"nghìn\", \"triệu\", \"tỷ\"];\n\n  function readThreeDigits(num) {\n    let hundred = Math.floor(num / 100);\n    let ten = Math.floor((num % 100) / 10);\n    let unit = num % 10;\n    let result = \"\";\n\n    if (hundred > 0) result += units[hundred] + \" trăm \";\n\n    if (ten > 1) {\n      result += units[ten] + \" mươi \";\n      if (unit === 1) result += \"mốt \";\n      else if (unit === 5) result += \"lăm \";\n      else if (unit > 0) result += units[unit] + \" \";\n    } else if (ten === 1) {\n      result += \"mười \";\n      if (unit === 5) result += \"lăm \";\n      else if (unit > 0) result += units[unit] + \" \";\n    } else if (unit > 0) {\n      result += \"lẻ \" + units[unit] + \" \";\n    }\n\n    return result.trim();\n  }\n\n  number = parseInt(number);\n  if (isNaN(number)) return \"\";\n\n  let result = \"\";\n  let scaleIndex = 0;\n\n  while (number > 0) {\n    let chunk = number % 1000;\n    if (chunk > 0) {\n      result =\n        readThreeDigits(chunk) +\n        \" \" +\n        scales[scaleIndex] +\n        \" \" +\n        result;\n    }\n    number = Math.floor(number / 1000);\n    scaleIndex++;\n  }\n\n  return result.trim() + \" đồng\";\n}\n\n// 🔥 Lấy dữ liệu từ Webhook\nconst data = $node[\"Webhook\"].json.query;\n\n// Format ngày\ndata.ngay_ky_hop_dong_format = formatDate(data.ngay_ky_hop_dong);\ndata.ngay_het_han_format = formatDate(data.ngay_het_han);\n\n// 🔥 Format lại chính biến tiền\nconst originalAmount = data.tong_gia_tri_hop_dong;\ndata.tong_gia_tri_hop_dong = formatCurrency(originalAmount);\n\n// Đọc tiền thành chữ (dùng số gốc)\ndata.tong_gia_tri_hop_dong_text = numberToVietnameseText(originalAmount);\n\nreturn { json: data };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "9d286682-35ee-4ee2-829e-d7cb3e822b5e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=https://docs.google.com/document/d/{{ $json.documentId }}/edit?usp=sharing",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        816,
+        0
+      ],
+      "id": "caf17389-5438-40c8-b574-1e631dde6414",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Copy file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Copy file": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.manhmanh.io.vn",
+            "user-agent": "axios/1.13.5",
+            "content-length": "2",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "116.96.47.159",
+            "cf-ipcountry": "VN",
+            "cf-ray": "9d57326c1e57ae68-SIN",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "42c53fba-9fbb-4252-87bd-74815e50bf2c",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "x-forwarded-for": "116.96.47.159",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {
+            "ten_hop_dong": "Hợp đồng khách hàng Luklak",
+            "tong_gia_tri_hop_dong": "10000000",
+            "ngay_ky_hop_dong": "2026-03-01",
+            "ngay_het_han": "2027-03-01",
+            "ten_cong_ty": "Luklak",
+            "nguoi_dai_dien": "Nguyễn Thanh Tùng",
+            "chuc_vu": "Giám Đốc"
+          },
+          "body": {},
+          "webhookUrl": "https://n8n.manhmanh.io.vn/webhook/8555b46e-d3a1-4f19-8695-c014dd06a804",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "e1e7cbe1-805e-4887-b8e3-7d5245afb16e",
+  "activeVersionId": "e1e7cbe1-805e-4887-b8e3-7d5245afb16e",
+  "versionCounter": 204,
+  "triggerCount": 1,
+  "tags": [
+    {
+      "updatedAt": "2026-03-01T08:56:36.029Z",
+      "createdAt": "2026-03-01T08:56:36.029Z",
+      "id": "X2JGhfGUsih4D0Ac",
+      "name": "minhanh"
+    },
+    {
+      "updatedAt": "2026-03-01T08:56:36.012Z",
+      "createdAt": "2026-03-01T08:56:36.012Z",
+      "id": "JmvEjDWSpwGcIVim",
+      "name": "luklak"
+    }
+  ],
+  "shared": [
+    {
+      "updatedAt": "2026-03-01T08:23:30.537Z",
+      "createdAt": "2026-03-01T08:23:30.537Z",
+      "role": "workflow:owner",
+      "workflowId": "FfEn46OkdGGBJSyu",
+      "projectId": "KwdJmDNvRqASiU2x",
+      "project": {
+        "updatedAt": "2026-02-27T13:59:50.045Z",
+        "createdAt": "2026-02-27T13:57:38.921Z",
+        "id": "KwdJmDNvRqASiU2x",
+        "name": "Minh Anh <minhanh01689@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "86288051-a86a-44f6-959c-04bf1c3dbb9f"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version e1e7cbe1",
+    "description": ""
+  }
+}

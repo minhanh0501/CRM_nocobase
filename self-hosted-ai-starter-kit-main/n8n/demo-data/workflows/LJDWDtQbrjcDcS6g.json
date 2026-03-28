@@ -1,0 +1,248 @@
+{
+  "updatedAt": "2026-03-03T08:10:42.315Z",
+  "createdAt": "2026-03-02T16:10:15.340Z",
+  "id": "LJDWDtQbrjcDcS6g",
+  "name": "AI tóm tắt cuộc họp",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "10Wi2C6OJOzHn_gdBkRqjSAgg_UU1AwiR",
+          "mode": "list",
+          "cachedResultName": "Meet Recordings",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/10Wi2C6OJOzHn_gdBkRqjSAgg_UU1AwiR"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        224,
+        80
+      ],
+      "id": "06967553-8213-4844-9690-b827c866f43e",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "6a7pKgfokMFUATu3",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-summary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        816,
+        80
+      ],
+      "id": "9a04444c-3f9b-4ec6-902d-7d8f3d53e615",
+      "name": "Webhook",
+      "webhookId": "897e550f-c4f0-4d5d-b2b8-55183588cf65"
+    },
+    {
+      "parameters": {
+        "content": "## Tự động khi có video meet lưu về Drive\n",
+        "height": 256,
+        "width": 464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        160,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "27be280a-8c57-4504-9dd5-fe3e645d4721",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "height": 256,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "6253689c-97b3-4523-bd75-777012799fad",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://colab.manhmanh.io.vn/api/summarize",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id_file",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "webhook_url",
+              "value": "https://n8n.manhmanh.io.vn/webhook/ai-summary"
+            },
+            {
+              "name": "id_lichhen",
+              "value": "={{ $json.name.match(/\\((\\d+)\\)/)[1] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        432,
+        80
+      ],
+      "id": "8220d6d8-67ae-46d1-ab08-713289d088a6",
+      "name": "Gửi lên colab"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://nocobase.manhmanh.io.vn/api/lich_hen:update",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filterByTk",
+              "value": "={{ $json.body.id_lichhen }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "tom_tat",
+              "value": "={{ $json.body.data.summary }}"
+            },
+            {
+              "name": "trang_thai_lich_hen",
+              "value": "hoan_thanh"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1024,
+        80
+      ],
+      "id": "c7dcb799-ec85-45d9-844e-f2627b8cf713",
+      "name": "Cập nhật tóm tắt meet",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Gửi lên colab",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Cập nhật tóm tắt meet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Google Drive Trigger": {
+      "lastTimeChecked": "2026-03-28T14:34:14Z"
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c2461428-2695-4ff9-b9c2-230201577e22",
+  "activeVersionId": "c2461428-2695-4ff9-b9c2-230201577e22",
+  "versionCounter": 83,
+  "triggerCount": 2,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-02T16:10:15.340Z",
+      "createdAt": "2026-03-02T16:10:15.340Z",
+      "role": "workflow:owner",
+      "workflowId": "LJDWDtQbrjcDcS6g",
+      "projectId": "KwdJmDNvRqASiU2x",
+      "project": {
+        "updatedAt": "2026-02-27T13:59:50.045Z",
+        "createdAt": "2026-02-27T13:57:38.921Z",
+        "id": "KwdJmDNvRqASiU2x",
+        "name": "Minh Anh <minhanh01689@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "86288051-a86a-44f6-959c-04bf1c3dbb9f"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version c2461428",
+    "description": ""
+  }
+}

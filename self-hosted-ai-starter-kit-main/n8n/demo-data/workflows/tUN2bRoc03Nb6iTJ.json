@@ -1,0 +1,295 @@
+{
+  "updatedAt": "2026-03-18T03:29:11.715Z",
+  "createdAt": "2026-03-02T10:09:22.016Z",
+  "id": "tUN2bRoc03Nb6iTJ",
+  "name": "SePay",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sepay-crm",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -736,
+        0
+      ],
+      "id": "0bc0063a-9d32-4146-9437-0a9b3e3631b2",
+      "name": "Webhook",
+      "webhookId": "e4ed2518-d6da-4fd1-bf21-7f6e9ec2429c"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "6BM3I70zslOP34cY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/6BM3I70zslOP34cY",
+          "cachedResultName": "Lấy data của công nợ"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -544,
+        0
+      ],
+      "name": "Lấy data của công nợ",
+      "id": "a160735b-d2c6-4722-99b9-25d7e8f2a5a7"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Lấy data của công nợ').item.json.data.email }}",
+        "subject": "Đã thanh toán công nợ thành công ",
+        "message": "=<!DOCTYPE html> <html lang=\"vi\"> <head>     <meta charset=\"UTF-8\">     <title>Thanh toán thành công</title> </head> <body style=\"font-family: Arial, sans-serif; text-align: center; padding: 40px;\">          <h2 style=\"color: #28a745;\">Thanh toán thành công</h2>          <p style=\"font-size: 18px;\">         Bạn đã thanh toán thành công số tiền <strong>{{ $json.data[0].so_tien_phai_thu }} VNĐ</strong>.     </p>          <p>         Thời gian: {{$now.format('dd-MM-yyyy')}}     </p>          <p>Cảm ơn bạn!</p>  </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        0
+      ],
+      "id": "1272d863-a7a4-4c96-9784-a0ccb5e55939",
+      "name": "Send a message",
+      "webhookId": "a1372550-b339-41ec-acc9-af37cd7fe7bc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "kVjZlEahvOIPZdkW",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://nocobase.manhmanh.io.vn/api/cong_no:update",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filterByTk",
+              "value": "={{ $json.data.id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "status_cong_no",
+              "value": "done"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -336,
+        0
+      ],
+      "id": "a7aff76d-873c-426d-9c96-66de11ae4cbb",
+      "name": "Cập nhật trạng thái (Công nợ)",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Lấy data của công nợ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lấy data của công nợ": {
+      "main": [
+        [
+          {
+            "node": "Cập nhật trạng thái (Công nợ)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cập nhật trạng thái (Công nợ)": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.manhmanh.io.vn",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+            "content-length": "336",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "2600:3c15::2000:8aff:fedd:874b",
+            "cf-ipcountry": "SG",
+            "cf-ray": "9d5fa8e0cc43c63b-SIN",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "f251ed78-0554-485d-b943-03bc09a1063a",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "x-forwarded-for": "2600:3c15::2000:8aff:fedd:874b",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "gateway": "MBBank",
+            "transactionDate": "2026-03-02 17:18:00",
+            "accountNumber": "9246905012003",
+            "subAccount": null,
+            "code": null,
+            "content": "NGUYEN TRONG PHUC chuyen tien",
+            "transferType": "in",
+            "description": "BankAPINotify NGUYEN TRONG PHUC chuyen tien",
+            "transferAmount": 3456,
+            "referenceCode": "FT26061105019252",
+            "accumulated": -47813,
+            "id": 43832799
+          },
+          "webhookUrl": "https://n8n.manhmanh.io.vn/webhook-test/sepay-crm",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Lấy data của công nợ": [
+      {
+        "json": {
+          "data": {
+            "createdAt": "2026-03-02T10:18:02.780Z",
+            "updatedAt": "2026-03-02T10:18:02.787Z",
+            "ID_nhanvien": 3,
+            "nhan_xet_ban_dau": null,
+            "id": 351110813188098,
+            "ten_cong_ty": "Luklak",
+            "ma_so_thue": "01235455",
+            "linh_vuc": "cong_nghe",
+            "nguon_khach": "gioi_thieu",
+            "nguoi_dai_dien": "Nguyễn Thanh Tùng",
+            "website": "luklak.com",
+            "chuc_vu": "Giám Đốc",
+            "phone": "098877665555",
+            "email": "nguyentrongphuc18012003@gmail.com",
+            "dia_chi": "Hà Nội",
+            "status": "thanh_cong",
+            "score": 80,
+            "createdById": 1,
+            "updatedById": null,
+            "id_khachhang": 10,
+            "total": 123456,
+            "ten_hop_dong": "Hợp đồng khách hàng Luklak",
+            "test": 2,
+            "con_phai_thu": 123456,
+            "ngay_ki": "2026-03-03",
+            "file": "https://docs.google.com/document/d/1qDf5cqQ2LZiMkU_sxHynvW6C9T6rKPAypn0n8GJtZ1c/edit?usp=sharing",
+            "ngay_het_han": "2026-03-03",
+            "da_thu": null,
+            "status_hop_dong": "ky_ket",
+            "so_tien_phai_thu": 3456,
+            "so_tien_da_thu": null,
+            "id_hopdong": 351100690235394,
+            "status_cong_no": "wait"
+          }
+        },
+        "binary": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "54e6409f-c822-4f50-bbee-9dfc70514f93",
+  "activeVersionId": "54e6409f-c822-4f50-bbee-9dfc70514f93",
+  "versionCounter": 179,
+  "triggerCount": 1,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-03-02T10:09:22.016Z",
+      "createdAt": "2026-03-02T10:09:22.016Z",
+      "role": "workflow:owner",
+      "workflowId": "tUN2bRoc03Nb6iTJ",
+      "projectId": "KwdJmDNvRqASiU2x",
+      "project": {
+        "updatedAt": "2026-02-27T13:59:50.045Z",
+        "createdAt": "2026-02-27T13:57:38.921Z",
+        "id": "KwdJmDNvRqASiU2x",
+        "name": "Minh Anh <minhanh01689@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "86288051-a86a-44f6-959c-04bf1c3dbb9f"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version 54e6409f",
+    "description": ""
+  }
+}

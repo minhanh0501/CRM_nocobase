@@ -1,0 +1,595 @@
+{
+  "updatedAt": "2026-03-22T15:26:38.611Z",
+  "createdAt": "2026-02-27T14:00:50.754Z",
+  "id": "x9lukEqqD6As49tm",
+  "name": "tạo khách hàng",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Đây là thông tin khách hàng cung cấp :\n- Tên công ty:{{ $json['Tên công ty'] }}\n- SĐT:{{ $json['Số điện thoại'] }}\n- Mã số thuế:{{ $json['Mã số thuế'] }}\n- Website:{{ $json.Website }}\n- Lĩnh vực:{{ $json['Lĩnh vực'] }}\n- Người đại diện:{{ $json['Người đại diện'] }} - chức vụ {{ $json['Chức vụ'] }}\n- Email:{{ $json.Email }}\n- Địa chỉ:{{ $json['Địa chỉ'] }}\n\n1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?\n{{ $json['1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?'] }}\n2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?\n{{ $json['2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?'] }}\n3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?\n{{ $json['3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?'] }}\n4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?\n{{ $json['4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?'] }}\n5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?\n{{ $json['5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?'] }}\n6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?\n{{ $json['6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?'] }}\n7. Độ phức tạp quy trình bán hàng?\n{{ $json['7. Độ phức tạp quy trình bán hàng?'] }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Bạn là một Hệ thống Lead Scoring AI chuyên phân tích khách hàng B2B cho sản phẩm “Phần mềm quản lý CRM nội bộ”. Nhiệm vụ của bạn là đọc toàn bộ dữ liệu khách hàng từ form và tính điểm chính xác trên thang 100 theo bảng quy đổi cố định bên dưới. Tuyệt đối không được đánh giá cảm tính, không suy diễn ngoài dữ liệu được cung cấp, không cộng điểm nếu thiếu thông tin. Nếu thiếu dữ liệu ở tiêu chí nào thì tiêu chí đó bằng 0 điểm. Tổng điểm là tổng của tất cả tiêu chí.\n\nQuy tắc chấm điểm bắt buộc:\n\nAuthority (tối đa 15 điểm): A = 15; B = 12; C = 7; D = 2.\nHồ sơ doanh nghiệp (tối đa 5 điểm): Có website hợp lệ = 2; Có MST hợp lệ = 3; Không có = 0.\nNgân sách (tối đa 20 điểm): A >100 triệu = 20; B 30–100 triệu = 15; C 10–30 triệu = 8; D <10 triệu = 3; Không rõ = 0.\nThời gian triển khai (tối đa 20 điểm): A 0–1 tháng = 20; B 1–3 tháng = 15; C 3–6 tháng = 8; D chưa xác định = 2.\nSố lượng user (tối đa 15 điểm): 1–5 = 5; 6–20 = 10; 21–50 = 15; >50 = 12.\nĐộ phức tạp quy trình (tối đa 10 điểm): Rõ ràng, nhiều bước, có phân quyền = 10; Trung bình = 6; Đơn giản = 3; Chưa có quy trình = 1.\nTrình độ công nghệ (tối đa 7 điểm): Am hiểu, có đội IT = 7; Sử dụng tốt công cụ số = 5; Cơ bản = 3; Hạn chế = 1.\nTrải nghiệm CRM (tối đa 8 điểm): Đang dùng CRM nhưng không hài lòng = 8; Dùng Excel rời rạc = 6; Chưa dùng gì = 5; Đang dùng CRM và hài lòng = 2.\n\nSau khi tính tổng điểm, phân loại bắt buộc theo quy tắc sau:\n\nTổng điểm < 50 → Lead THẤP\nTổng điểm từ 50 đến 80 → Lead TIỀM NĂNG\nTổng điểm > 80 → Lead RẤT TIỀM NĂNG\n\nViết nhận xét tối đa 4 câu gồm: mức độ tiềm năng, điểm mạnh nổi bật nhất, rủi ro chính (nếu có), và hành động cụ thể đề xuất cho Sales.\n\nTuyệt đối chỉ trả về một chuỗi JSON hợp lệ, không chứa bất kỳ ký tự, văn bản giải thích hay định dạng markdown nào nằm ngoài JSON.\n\nĐịnh dạng đầu ra (JSON):\n\n{\n  \"diem_so\": [Nhập số nguyên từ 0 đến 100],\n  \"nhan_xet\": \"[Nhập nhận xét tổng quan và gợi ý hành động cho Sales]\"\n}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1200,
+        224
+      ],
+      "id": "273783b3-86d1-49a9-90d1-537ec77ce329",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        416
+      ],
+      "id": "10666418-6428-4071-8c44-c97caf1c26e4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vgVJSWQoWHRxeHef",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"diem_so\": 50,\n\t\"nhan_xet\": \"đây là khách hàng....\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1360,
+        416
+      ],
+      "id": "3a2ca2a2-e204-4762-873f-6a63e2e87b44",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://nocobase.manhmanh.io.vn/api/t_whq51q47o83:create",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"ten_cong_ty\": \"{{ $('form - Website').item.json['Tên công ty'] }}\",\n  \"ma_so_thue\": \"{{ $('form - Website').item.json['Mã số thuế'] }}\",\n  \"website\": \"{{ $('form - Website').item.json.Website }}\",\n  \"linh_vuc\": \"{{ $('form - Website').item.json['Lĩnh vực'] }}\",\n  \"nguon_khach\": \"Website\",\n  \"nguoi_dai_dien\": \"{{ $('form - Website').item.json['Người đại diện'] }}\",\n  \"chuc_vu\": \"{{ $('form - Website').item.json['Chức vụ'] }}\",\n  \"phone\": \"{{ $('form - Website').item.json['Số điện thoại'] }}\",\n  \"email\": \"{{ $('form - Website').item.json.Email }}\",\n  \"dia_chi\": \"{{ $('form - Website').item.json['Địa chỉ'] }}\",\n  \"status\": \"moi_tao\",\n  \"score\": {{ $json.output.diem_so }},\n  \"nhan_xet_ban_dau\": \"{{ $json.output.nhan_xet.replace(/\"/g, \"'\")}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        224
+      ],
+      "id": "f5b59a5f-c316-4095-bb45-d4488d9f07f2",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Đây là thông tin khách hàng cung cấp :\n- Tên công ty:{{ $json['Tên công ty'] }}\n- SĐT:{{ $json['Số điện thoại'] }}\n- Mã số thuế:{{ $json['Mã số thuế'] }}\n- Website:{{ $json.Website }}\n- Lĩnh vực:{{ $json['Lĩnh vực'] }}\n- Người đại diện:{{ $json['Người đại diện'] }} - chức vụ {{ $json['Chức vụ'] }}\n- Email:{{ $json.Email }}\n- Địa chỉ:{{ $json['Địa chỉ'] }}\n\n1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?\n{{ $json['1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?'] }}\n2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?\n{{ $json['2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?'] }}\n3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?\n{{ $json['3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?'] }}\n4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?\n{{ $json['4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?'] }}\n5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?\n{{ $json['5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?'] }}\n6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?\n{{ $json['6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?'] }}\n7. Độ phức tạp quy trình bán hàng?\n{{ $json['7. Độ phức tạp quy trình bán hàng?'] }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Bạn là một Hệ thống Lead Scoring AI chuyên phân tích khách hàng B2B cho sản phẩm “Phần mềm quản lý CRM nội bộ”. Nhiệm vụ của bạn là đọc toàn bộ dữ liệu khách hàng từ form và tính điểm chính xác trên thang 100 theo bảng quy đổi cố định bên dưới. Tuyệt đối không được đánh giá cảm tính, không suy diễn ngoài dữ liệu được cung cấp, không cộng điểm nếu thiếu thông tin. Nếu thiếu dữ liệu ở tiêu chí nào thì tiêu chí đó bằng 0 điểm. Tổng điểm là tổng của tất cả tiêu chí.\n\nQuy tắc chấm điểm bắt buộc:\n\nAuthority (tối đa 15 điểm): A = 15; B = 12; C = 7; D = 2.\nHồ sơ doanh nghiệp (tối đa 5 điểm): Có website hợp lệ = 2; Có MST hợp lệ = 3; Không có = 0.\nNgân sách (tối đa 20 điểm): A >100 triệu = 20; B 30–100 triệu = 15; C 10–30 triệu = 8; D <10 triệu = 3; Không rõ = 0.\nThời gian triển khai (tối đa 20 điểm): A 0–1 tháng = 20; B 1–3 tháng = 15; C 3–6 tháng = 8; D chưa xác định = 2.\nSố lượng user (tối đa 15 điểm): 1–5 = 5; 6–20 = 10; 21–50 = 15; >50 = 12.\nĐộ phức tạp quy trình (tối đa 10 điểm): Rõ ràng, nhiều bước, có phân quyền = 10; Trung bình = 6; Đơn giản = 3; Chưa có quy trình = 1.\nTrình độ công nghệ (tối đa 7 điểm): Am hiểu, có đội IT = 7; Sử dụng tốt công cụ số = 5; Cơ bản = 3; Hạn chế = 1.\nTrải nghiệm CRM (tối đa 8 điểm): Đang dùng CRM nhưng không hài lòng = 8; Dùng Excel rời rạc = 6; Chưa dùng gì = 5; Đang dùng CRM và hài lòng = 2.\n\nSau khi tính tổng điểm, phân loại bắt buộc theo quy tắc sau:\n\nTổng điểm < 50 → Lead THẤP\nTổng điểm từ 50 đến 80 → Lead TIỀM NĂNG\nTổng điểm > 80 → Lead RẤT TIỀM NĂNG\n\nViết nhận xét tối đa 4 câu gồm: mức độ tiềm năng, điểm mạnh nổi bật nhất, rủi ro chính (nếu có), và hành động cụ thể đề xuất cho Sales.\n\nTuyệt đối chỉ trả về một chuỗi JSON hợp lệ, không chứa bất kỳ ký tự, văn bản giải thích hay định dạng markdown nào nằm ngoài JSON.\n\nĐịnh dạng đầu ra (JSON):\n\n{\n  \"diem_so\": [Nhập số nguyên từ 0 đến 100],\n  \"nhan_xet\": \"[Nhập nhận xét tổng quan và gợi ý hành động cho Sales]\"\n}\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1168,
+        624
+      ],
+      "id": "96213792-95dc-4f72-89d3-0b73cce758c6",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        816
+      ],
+      "id": "893d9f48-6b9c-4e95-9c3c-93a79edcef8c",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vgVJSWQoWHRxeHef",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"diem_so\": 50,\n\t\"nhan_xet\": \"đây là khách hàng....\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1328,
+        816
+      ],
+      "id": "c27f93ae-e6cb-4ef7-b1fe-1700c8336d6e",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://nocobase.manhmanh.io.vn/api/t_whq51q47o83:create",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"ten_cong_ty\": \"{{ $('On form submission - Quảng cáo').item.json['Tên công ty'] }}\",\n  \"ma_so_thue\": \"{{ $('On form submission - Quảng cáo').item.json['Mã số thuế'] }}\",\n  \"website\": \"{{ $('On form submission - Quảng cáo').item.json.Website }}\",\n  \"linh_vuc\": \"{{ $('On form submission - Quảng cáo').item.json['Lĩnh vực'] }}\",\n  \"nguon_khach\": \"Quảng cáo\",\n  \"nguoi_dai_dien\": \"{{ $('On form submission - Quảng cáo').item.json['Người đại diện'] }}\",\n  \"chuc_vu\": \"{{ $('On form submission - Quảng cáo').item.json['Chức vụ'] }}\",\n  \"phone\": \"{{ $('On form submission - Quảng cáo').item.json['Số điện thoại'] }}\",\n  \"email\": \"{{ $('On form submission - Quảng cáo').item.json.Email }}\",\n  \"dia_chi\": \"{{ $('On form submission - Quảng cáo').item.json['Địa chỉ'] }}\",\n  \"status\": \"moi_tao\",\n  \"score\": {{ $json.output.diem_so }},\n  \"nhan_xet_ban_dau\": \"{{ $json.output.nhan_xet.replace(/\"/g, \"'\")}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1536,
+        624
+      ],
+      "id": "2c6b47d3-9792-4c03-87d6-6f3b7c8dd757",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "28UlLbnk37IbCmjv",
+          "name": "nocobase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Form website",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Tên công ty",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Số điện thoại",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Mã số thuế",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Website"
+            },
+            {
+              "fieldLabel": "Lĩnh vực",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Công nghệ"
+                  },
+                  {
+                    "option": "Tài chính"
+                  },
+                  {
+                    "option": "Y tế / Chăm sóc sức khỏe"
+                  },
+                  {
+                    "option": "Sản xuất"
+                  },
+                  {
+                    "option": "Bán lẻ"
+                  },
+                  {
+                    "option": "Giáo dục"
+                  },
+                  {
+                    "option": "Bất động sản"
+                  },
+                  {
+                    "option": "Tư vấn"
+                  },
+                  {
+                    "option": "Logistics"
+                  },
+                  {
+                    "option": "Năng lượng"
+                  },
+                  {
+                    "option": "Khác"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Người đại diện"
+            },
+            {
+              "fieldLabel": "Chức vụ"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Địa chỉ",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?"
+            },
+            {
+              "fieldLabel": "3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?"
+            },
+            {
+              "fieldLabel": "7. Độ phức tạp quy trình bán hàng?",
+              "fieldType": "textarea",
+              "placeholder": "Vd: Chưa có quy trình "
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "path": "website"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        992,
+        224
+      ],
+      "id": "e5bb40b7-6e6b-4291-94ae-ee74866ea45a",
+      "name": "form - Website",
+      "webhookId": "4f2987cc-1260-4c97-8263-2e387de0e561"
+    },
+    {
+      "parameters": {
+        "formTitle": "Form quảng cáo",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Tên công ty",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Số điện thoại",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Mã số thuế",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Website"
+            },
+            {
+              "fieldLabel": "Lĩnh vực",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Công nghệ"
+                  },
+                  {
+                    "option": "Tài chính"
+                  },
+                  {
+                    "option": "Y tế / Chăm sóc sức khỏe"
+                  },
+                  {
+                    "option": "Sản xuất"
+                  },
+                  {
+                    "option": "Bán lẻ"
+                  },
+                  {
+                    "option": "Giáo dục"
+                  },
+                  {
+                    "option": "Bất động sản"
+                  },
+                  {
+                    "option": "Tư vấn"
+                  },
+                  {
+                    "option": "Logistics"
+                  },
+                  {
+                    "option": "Năng lượng"
+                  },
+                  {
+                    "option": "Khác"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Người đại diện"
+            },
+            {
+              "fieldLabel": "Chức vụ"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Địa chỉ",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?"
+            },
+            {
+              "fieldLabel": "3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?"
+            },
+            {
+              "fieldLabel": "7. Độ phức tạp quy trình bán hàng?",
+              "fieldType": "textarea",
+              "placeholder": "Vd: Chưa có quy trình "
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "path": "quangcao"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        960,
+        624
+      ],
+      "id": "a10ef70b-f5b3-456e-8b56-d4891578b390",
+      "name": "On form submission - Quảng cáo",
+      "webhookId": "68a930fd-c6a1-45bd-b5db-f7e0ead5a0ae"
+    }
+  ],
+  "connections": {
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "form - Website": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission - Quảng cáo": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "form - Website": [
+      {
+        "json": {
+          "Tên công ty": "CÔNG TY TNHH COSACO",
+          "Số điện thoại": "0987654321",
+          "Mã số thuế": 318025729,
+          "Website": "https://cosaco.vn/",
+          "Lĩnh vực": "Sản xuất",
+          "Người đại diện": "Lê Đình Huấn",
+          "Chức vụ": "CEO",
+          "Email": "minhanh050103@gmail.com",
+          "Địa chỉ": "964/55 Nguyễn Văn Quá, P.Đông Hưng Thuận,HCM",
+          "1. Anh/chị đang giữ vai trò như thế nào trong việc lựa chọn và triển khai CRM tại doanh nghiệp?": "CEO",
+          "2. Doanh nghiệp dự kiến ngân sách đầu tư cho hệ thống CRM trong giai đoạn này khoảng bao nhiêu?": "50 triệu",
+          "3. Hiện tại doanh nghiệp có kế hoạch triển khai CRM trong thời gian nào?": "Đang tìm hiểu nếu phù hợp thì triển khai luôn",
+          "4. Đội ngũ của anh/chị có mức độ am hiểu và sử dụng công nghệ/phần mềm quản lý ở mức nào?": "Toàn trung niên cũng có nhân sự trẻ tuổi nên trình độ công nghệ cũng vừa phải",
+          "5. Hiện tại doanh nghiệp đã từng sử dụng phần mềm CRM hoặc công cụ quản lý nào chưa? Trải nghiệm như thế nào?": "Đang dùng excel, zalo",
+          "6. Có bao nhiêu nhân sự sẽ trực tiếp sử dụng hệ thống CRM?": "20 nhân sự",
+          "7. Độ phức tạp quy trình bán hàng?": "Quản lý khách hàng, công nợ, hợp đồng. Đã có quy trình cụ thể, mong muốn được tư vấn để góp ý thêm",
+          "submittedAt": "2026-03-22T11:15:15.228-04:00",
+          "formMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "1b0fda13-cce2-4e70-a932-931ad1ffec28",
+  "activeVersionId": "1b0fda13-cce2-4e70-a932-931ad1ffec28",
+  "versionCounter": 185,
+  "triggerCount": 2,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-02-27T14:00:50.754Z",
+      "createdAt": "2026-02-27T14:00:50.754Z",
+      "role": "workflow:owner",
+      "workflowId": "x9lukEqqD6As49tm",
+      "projectId": "KwdJmDNvRqASiU2x",
+      "project": {
+        "updatedAt": "2026-02-27T13:59:50.045Z",
+        "createdAt": "2026-02-27T13:57:38.921Z",
+        "id": "KwdJmDNvRqASiU2x",
+        "name": "Minh Anh <minhanh01689@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "86288051-a86a-44f6-959c-04bf1c3dbb9f"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": "Version 1b0fda13",
+    "description": ""
+  }
+}
