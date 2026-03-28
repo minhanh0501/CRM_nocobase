@@ -27,19 +27,30 @@ Dự án được cấu trúc thành các module độc lập. Yêu cầu hệ t
    ```bash
    cd nocobase
    ```
-2. Cấu hình các biến môi trường trong file `.env` nếu cần.
+2. Tạo file `.env` từ file mẫu và điền **Cloudflare Tunnel Token**:
+   ```bash
+   cp .env.example .env
+   # Mở file .env và điền TUNNEL_TOKEN=...
+   ```
 3. Chạy hệ thống bằng Docker:
    ```bash
    docker-compose up -d
    ```
-*(Lưu ý: Nếu hệ thống chưa có dữ liệu, bạn có thể restore từ file dump `nocobase_backup.sql` đi kèm trong thư mục).*
+*(Lưu ý: Nếu hệ thống chưa có dữ liệu cấu hình UI, bạn hãy khôi phục từ file dump `nocobase_backup.sql` bằng lệnh sau (yêu cầu chạy trên Terminal/PowerShell) sau khi container đã khởi động:)*
+   ```bash
+   Get-Content nocobase_backup.sql | docker exec -i n-postgres-1 psql -U nocobase -d nocobase
+   ```
 
 ### 2. Khởi chạy hệ thống Tự động hóa n8n
 1. Di chuyển vào thư mục `self-hosted-ai-starter-kit-main`:
    ```bash
    cd self-hosted-ai-starter-kit-main
    ```
-2. Cấu hình biến môi trường trong `.env` (ví dụ: API keys, webhook URLs).
+2. Tạo file `.env` từ file mẫu và thiết lập các biến môi trường (API keys, webhook URLs, và **TUNNEL_TOKEN** của Cloudflare Tunnel):
+   ```bash
+   cp .env.example .env
+   # Mở file .env và điền các giá trị cấu hình tương ứng
+   ```
 3. Chạy n8n bằng Docker:
    ```bash
    docker-compose up -d
