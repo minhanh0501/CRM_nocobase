@@ -2,11 +2,11 @@
 Nghiên cứu và Ứng dụng AI trong Hệ thống CRM Nội Bộ, Đánh giá Khách hàng và Tóm tắt Cuộc hẹn
 
 ## 🎥 Video Demo
-Dưới đây là video demo (trải nghiệm hệ thống). Bạn có thể xem trực tiếp hoặc tải về qua link: [video_demo.mp4](./video_demo.mp4)
+Xem trải nghiệm hệ thống qua video demo dưới đây:
 
-<video src="./video_demo.mp4" controls="controls" width="100%" style="max-width: 800px;">
-  Trình duyệt của bạn không hỗ trợ thẻ video. Bạn có thể <a href="./video_demo.mp4">tải video tại đây</a>.
-</video>
+https://github.com/minhanh0501/CRM_nocobase/raw/main/video_demo.mp4
+
+
 
 ## 📖 Giới thiệu dự án
 Dự án xây dựng một hệ thống Quản lý Quan hệ Khách hàng (CRM) nhằm hỗ trợ doanh nghiệp quản lý thông tin khách hàng, theo dõi quá trình chăm sóc khách hàng và tự động hóa các nghiệp vụ kinh doanh.
