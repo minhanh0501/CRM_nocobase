@@ -4,7 +4,7 @@ Nghiên cứu và Ứng dụng AI trong Hệ thống CRM Nội Bộ, Đánh giá
 ## 🎥 Video Demo
 Xem trải nghiệm hệ thống qua video demo dưới đây:
 
-https://github.com/user-attachments/assets/4d11a87b-00e2-48f3-9bf7-389d21072d13
+https://github.com/user-attachments/assets/8335683e-e487-4f49-bd28-dfb7fd978b4b
 
 ## 📖 Giới thiệu dự án
 Dự án xây dựng một hệ thống Quản lý Quan hệ Khách hàng (CRM) nhằm hỗ trợ doanh nghiệp quản lý thông tin khách hàng, theo dõi quá trình chăm sóc khách hàng và tự động hóa các nghiệp vụ kinh doanh.
