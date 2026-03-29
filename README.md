@@ -4,7 +4,7 @@ Nghiên cứu và Ứng dụng AI trong Hệ thống CRM Nội Bộ, Đánh giá
 ## 🎥 Video Demo
 Xem trải nghiệm hệ thống qua video demo dưới đây:
 
-https://github.com/minhanh0501/CRM_nocobase/raw/main/video_demo.mp4
+https://github.com/minhanh0501/CRM_nocobase/video_demo.mp4
 
 
 
